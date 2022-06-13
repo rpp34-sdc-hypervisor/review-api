@@ -11,7 +11,6 @@ app.get('/reviews', (req, res) => {
         res.status(400);
         res.json({message: "no product_id"});
     } else {
-        console.log(product_id)
         Review
             .findAll({ 
                 limit: 100,
@@ -24,7 +23,6 @@ app.get('/reviews', (req, res) => {
                 } 
              }) // select * from review;
             .then((reviews) => {
-                console.log(reviews)
                 res.send({
                     results: reviews,
                 })
@@ -33,7 +31,7 @@ app.get('/reviews', (req, res) => {
 });
 
 app.get('/reviews/meta/:product_id', (req, res) => {
-    const {product_id} = req.body;
+    const {product_id} = req.query;
     if (!product_id) {
         res.status(400);
         res.json({message: "no product_id"});
@@ -48,19 +46,33 @@ app.get('/reviews/meta/:product_id', (req, res) => {
 //     } 
 // });
 
-app.put('/reviews/:review_id/helpful', (req, res) => {  
-    const {reveiw_id} = req.body;
+app.put('/reviews/:review_id/helpful', async (req, res) => {  
+    const {review_id} = req.query;
+    // 1. get a row from the db
+    // 2. update a row by incrementing helpful
     if (!product_id) {
         res.status(400);
         res.json({message: "no product_id"});
+    } else {
+        const review = await Review.find({ where: { review_id } })
+        const result = await review.increment('helpfulness', { by: 1});
+        res.send({
+            result,
+        })
     }
 });
 
-app.put('/reviews/:review_id/report', (req, res) => {
-    const {review_id} = req.body;
+app.put('/reviews/:review_id/report', async (req, res) => {
+    const {review_id} = req.query;
     if (!product_id) {
         res.status(400);
         res.json({message: "no product_id"});
+    } else {
+        const review = await Review.find({ where: { review_id } })
+        const result = await review.increment('reported', { by: 1});
+        res.send({
+            result,
+        })
     }
 });
 

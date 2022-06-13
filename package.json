@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "stresstestdb": "psql -d atelier -f ./__stress-test__/postgres.sql"
   },
   "repository": {
     "type": "git",
