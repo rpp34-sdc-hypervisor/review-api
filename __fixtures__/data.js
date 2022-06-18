@@ -6,7 +6,8 @@ const readline = require("readline");
 const { 
     createReviewRecord, 
     createPhotoRecord, 
-    syncReview, 
+    syncReview,
+    Review,
     syncPhoto
 } = require('../database')
 
@@ -16,11 +17,32 @@ const extractCSV = async (sync, createRecord, filePath) => {
     const input = fs.createReadStream(path.join(__dirname, filePath));
     const rl = readline.createInterface({input});
 
+    let collector = [];
+
+    let isFirstLine = true;
+
     rl.on("line", async (row) => {
         try {
-            await createRecord(row.split(","))
+            if (collector.length === 100) {
+                rl.pause()
+                Review.bulkCreate([...collector], { logging: false }).then(() => {
+                    collector = [];
+                    rl.resume()
+                }).catch(err => {
+                    // rl.close()
+                    console.log(err)
+                })
+                // await reviews.save();
+            } else {
+                if (isFirstLine) {
+                    isFirstLine = false;
+                } else {
+                    collector.push(createRecord(row.split(",")));
+                }
+            }
+            // await createRecord(row.split(","))
         } catch (err) {
-            console.error(err);
+            // console.error(err);
         }
     });
     rl.on("close", () => {
@@ -30,8 +52,8 @@ const extractCSV = async (sync, createRecord, filePath) => {
 
 const pathToReview = './old_reviews.csv';
 const pathToPhoto= './reviews_photos.csv';
-// extractCSV(syncReview, createReviewRecord);
-extractCSV(syncPhoto, createPhotoRecord, pathToPhoto);
+extractCSV(syncReview, createReviewRecord, pathToReview);
+// extractCSV(syncPhoto, createPhotoRecord, pathToPhoto);
 
 // const id = 2884134
 // const product_id = 71719

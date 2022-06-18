@@ -47,15 +47,15 @@ app.get('/reviews/meta/:product_id', (req, res) => {
 // });
 
 app.put('/reviews/:review_id/helpful', async (req, res) => {  
-    const {review_id} = req.query;
+    const { review_id } = req.params;
     // 1. get a row from the db
     // 2. update a row by incrementing helpful
-    if (!product_id) {
+    if (!review_id) {
         res.status(400);
-        res.json({message: "no product_id"});
+        res.json({message: "no review_id"});
     } else {
-        const review = await Review.find({ where: { review_id } })
-        const result = await review.increment('helpfulness', { by: 1});
+        const review = await Review.findOne({ where: { id: review_id } })
+        const result = await review.increment('helpfulness', { by: 1 });
         res.send({
             result,
         })
@@ -63,19 +63,21 @@ app.put('/reviews/:review_id/helpful', async (req, res) => {
 });
 
 app.put('/reviews/:review_id/report', async (req, res) => {
-    const {review_id} = req.query;
-    if (!product_id) {
+    const { review_id } = req.params;
+    if (!review_id) {
         res.status(400);
-        res.json({message: "no product_id"});
+        res.json({message: "no review_id"});
     } else {
-        const review = await Review.find({ where: { review_id } })
-        const result = await review.increment('reported', { by: 1});
+        const review = await Review.find({ where: { id: review_id } })
+        const result = await review.increment('reported', { by: 1 });
         res.send({
             result,
         })
     }
 });
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`server listens on port ${port}`);
 });
+
+module.exports = server;
