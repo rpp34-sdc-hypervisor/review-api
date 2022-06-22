@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "stresstestdb": "psql -d atelier -f ./__stress-test__/postgres.sql"
   },
   "repository": {
     "type": "git",
@@ -17,7 +18,8 @@
   },
   "homepage": "https://github.com/rpp34-sdc-hypervisor/review-api#readme",
   "devDependencies": {
-    "jest": "^28.1.0"
+    "jest": "^28.1.0",
+    "supertest": "^6.2.3"
   },
   "dependencies": {
     "express": "^4.18.1",
