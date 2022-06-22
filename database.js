@@ -1,8 +1,9 @@
 
 const { Sequelize, DataTypes } = require('sequelize');
+const { rdsEndpoint, username, password } = require('./config')
 
-const sequelize = new Sequelize('atelier', '', '', {
-  host: 'localhost',
+const sequelize = new Sequelize('atelier', username, password, {
+  host: rdsEndpoint,
   dialect: 'postgres',
   logging: false,
 });

@@ -4,7 +4,7 @@ CREATE DATABASE IF NOT EXISTS atelier;
 
 USE atelier;
 
-CREATE TABLE IF NOT EXISTS review (
+CREATE TABLE IF NOT EXISTS reviews (
   id INT,
   product_id INT,
   rating INT,
@@ -28,4 +28,11 @@ CREATE TABLE IF NOT EXISTS photos (
   CONSTRAINT fk_review
     FOREIGN KEY(review_id)
       REFERENCES reviews(id)
+);
+
+
+# index review_id column in photos table
+CREATE INDEX review_id_index ON photos
+(
+    review_id
 );

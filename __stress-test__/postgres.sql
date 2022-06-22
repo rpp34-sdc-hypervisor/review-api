@@ -1,7 +1,7 @@
 
 /* reads up to 100 reviews */
 BEGIN;
-EXPLAIN ANALYZE SELECT "Review".*, "photos"."id" AS "photos.id", "photos"."review_id" AS "photos.review_id", "photos"."url" AS "photos.url", "photos"."createdAt" AS "photos.createdAt", "photos"."updatedAt" AS "photos.updatedAt", "photos"."ReviewId" AS "photos.ReviewId" FROM (SELECT "Review"."id", "Review"."product_id", "Review"."rating", "Review"."date", "Review"."summary", "Review"."body", "Review"."recommend", "Review"."reported", "Review"."reviewer_name", "Review"."reviewer_email", "Review"."response", "Review"."helpfulness", "Review"."createdAt", "Review"."updatedAt" FROM "Reviews" AS "Review" WHERE "Review"."product_id" = '64623' LIMIT 100) AS "Review" LEFT OUTER JOIN "photos" AS "photos" ON "Review"."id" = "photos"."review_id";
+EXPLAIN ANALYZE SELECT "reviews".*, "photos"."id" AS "photos.id", "photos"."review_id" AS "photos.review_id", "photos"."url" AS "photos.url", "photos"."review_id" AS "photos.reviewId" FROM (SELECT "reviews"."id", "reviews"."product_id", "reviews"."rating", "reviews"."date", "reviews"."summary", "reviews"."body", "reviews"."recommend", "reviews"."reported", "reviews"."reviewer_name", "reviews"."reviewer_email", "reviews"."response", "reviews"."helpfulness" FROM "reviews" AS "reviews" WHERE "reviews"."product_id" = '71719' LIMIT 100) AS "reviews" LEFT OUTER JOIN "photos" AS "photos" ON "reviews"."id" = "photos"."review_id";
 ROLLBACK;
 
 /* 

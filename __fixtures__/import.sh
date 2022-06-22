@@ -12,3 +12,4 @@ CAST(to_timestamp(date) AS date)
 
 # photos
 \copy photos from /Users/anuar/Coding/rpp34/review-api/__fixtures__/reviews_photos.csv delimiter ',' CSV HEADER;
+
