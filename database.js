@@ -1,12 +1,19 @@
 
+const { options } = require('pg/lib/defaults');
 const { Sequelize, DataTypes } = require('sequelize');
 const { rdsEndpoint, username, password } = require('./config')
 
-const sequelize = new Sequelize('atelier', username, password, {
-  host: rdsEndpoint,
-  dialect: 'postgres',
-  logging: false,
-});
+const sequelize = new Sequelize(
+    'atelier', 
+    username, 
+    password, 
+    {
+        host: rdsEndpoint,
+        // port: 5432,
+        logging: console.log,
+        maxConcurrentQueries: 100,
+        dialect: 'postgres',
+    });
 
 // create table (model)
 const Review = sequelize.define('reviews', {
