@@ -1,19 +1,27 @@
 
 const { options } = require('pg/lib/defaults');
 const { Sequelize, DataTypes } = require('sequelize');
-const { rdsEndpoint, username, password } = require('./config')
+const { database, username, password } = require('./config')
 
 const sequelize = new Sequelize(
     'atelier', 
     username, 
     password, 
     {
-        host: rdsEndpoint,
-        // port: 5432,
-        logging: console.log,
+        host: database,
+        port: 5432,
+        logging: false,
         maxConcurrentQueries: 100,
         dialect: 'postgres',
     });
+// (async function() {
+//     try {
+//         await sequelize.authenticate();
+//     console.log('Connection has been established successfully.');
+//     } catch (error) {
+//         console.error('Unable to connect to the database:', error);
+//     }
+// })()
 
 // create table (model)
 const Review = sequelize.define('reviews', {
