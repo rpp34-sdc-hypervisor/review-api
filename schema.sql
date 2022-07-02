@@ -36,3 +36,8 @@ CREATE INDEX review_id_index ON photos
 (
     review_id
 );
+
+CREATE INDEX product_id_index ON reviews
+(
+    product_id
+);
