@@ -1,12 +1,25 @@
 const express = require('express');
 const { Review, Photo } = require('./database');
+const { cache } = require('./cache');
 
 const port = 8000;
 
 const app = express();
 
-app.get('/reviews', (req, res) => {
-    const {page = 1, count = 5, sort = "newest", product_id} = req.query;
+app.get('/reviews', async (req, res) => {
+    const {page = 1, count = 5, sort = "newest", product_id } = req.query;
+    console.log(`product_id: ${product_id}`)
+
+    const val = await cache.get(product_id);
+
+    if (val !== null) {
+        res.status(200);
+        res.send({
+            results: JSON.parse(val),
+        });
+        return;
+    }
+
     if (!product_id) {
         res.status(400);
         res.json({message: "no product_id"});
@@ -21,13 +34,16 @@ app.get('/reviews', (req, res) => {
                 where: {
                     product_id,
                 } 
-             }) // select * from review;
+            }) // select * from review;
             .then((reviews) => {
+                cache.set(product_id, JSON.stringify(reviews));
+
                 res.send({
                     results: reviews,
                 })
             })
     }
+
 });
 
 app.get('/reviews/meta/:product_id', (req, res) => {
