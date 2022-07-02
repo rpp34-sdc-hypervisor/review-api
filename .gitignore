@@ -2,3 +2,4 @@ node_modules
 coverage
 __fixtures__/**/*.csv
 config.js
+token.txt

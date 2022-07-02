@@ -1,4 +1,7 @@
+const path = require('path');
 const express = require('express');
+
+const { loaderIoUrl } = require('./config');
 const { Review, Photo } = require('./database');
 const { cache } = require('./cache');
 
@@ -6,9 +9,13 @@ const port = 8000;
 
 const app = express();
 
+app.get(loaderIoUrl, (_req, res) => {
+    res.sendFile(path.join(__dirname, './token.txt'));
+});
+
 app.get('/reviews', async (req, res) => {
     const {page = 1, count = 5, sort = "newest", product_id } = req.query;
-    console.log(`product_id: ${product_id}`)
+    // console.log(`product_id: ${product_id}`)
 
     const val = await cache.get(product_id);
 
